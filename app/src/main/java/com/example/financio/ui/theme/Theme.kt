@@ -1,7 +1,7 @@
 package com.example.financio.ui.theme
 
-import android.app.Activity
 import android.os.Build
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -21,8 +21,7 @@ private val LightColorScheme = lightColorScheme(
     primary = Purple40,
     secondary = PurpleGrey40,
     tertiary = Pink40
-
-    /* Other default colors to override
+    /* Outras cores padrão para substituir
     background = Color(0xFFFFFBFE),
     surface = Color(0xFFFFFBFE),
     onPrimary = Color.White,
@@ -36,7 +35,7 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun BiometricAuthTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
+    // Cor dinâmica está disponível no Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
@@ -52,9 +51,10 @@ fun BiometricAuthTheme(
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
-            val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+            val window = (view.context as? ComponentActivity)?.window
+            window?.statusBarColor = colorScheme.background.toArgb()
+            val insetsController = window?.let { WindowCompat.getInsetsController(it, view) }
+            insetsController?.isAppearanceLightStatusBars = !darkTheme
         }
     }
 
